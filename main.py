@@ -1,3 +1,4 @@
+import random
 from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
@@ -32,7 +33,12 @@ def home():
 ## HTTP GET - Read Record
 @app.route("/random")
 def get_random_cafe():
-    pass
+    # Get the total number of rows
+    row_count = Cafe.query.count()
+    # Generate a random number for skipping some records
+    random_offset = random.randint(0, row_count - 1)
+    # Return the first record after skipping random_offset rows
+    random_cafe = Cafe.query.offset(random_offset).first()
 
 
 ## HTTP POST - Create Record
