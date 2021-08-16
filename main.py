@@ -35,6 +35,18 @@ class Cafe(db.Model):
 
         return dictionary
 
+    def __init__(self, cafe_dict):
+        self.name = cafe_dict["name"]
+        self.map_url = cafe_dict["map_url"]
+        self.img_url = cafe_dict["img_url"]
+        self.location = cafe_dict["loc"]
+        self.seats = cafe_dict["seats"]
+        self.has_toilet = bool(cafe_dict["toilet"])
+        self.has_wifi = bool(cafe_dict["wifi"])
+        self.has_sockets = bool(cafe_dict["sockets"])
+        self.can_take_calls = bool(cafe_dict["calls"])
+        self.coffee_price = cafe_dict["coffee_price"]
+
 
 @app.route("/")
 def home():
@@ -74,6 +86,14 @@ def search():
 
 
 ## HTTP POST - Create Record
+@app.route("/add", methods=["POST"])
+def add_new_cafe():
+    new_cafe = Cafe(request.form)
+    db.session.add(new_cafe)
+    db.session.commit()
+
+    return make_response(jsonify(response={"success": "Successfully added the new cafe."}), 201)
+
 
 ## HTTP PUT/PATCH - Update Record
 
