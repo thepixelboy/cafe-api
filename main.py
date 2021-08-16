@@ -1,5 +1,5 @@
 import random
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, make_response
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -69,7 +69,8 @@ def search():
     if cafe:
         return jsonify(cafe=cafe.to_dict(), status=200)
     else:
-        return jsonify(error="Sorry, we don't have a cafe at that location.", category="error", status=404)
+        # Using make_response to allow for status codes (404 Not found here)
+        return make_response(jsonify({"Not found": "Sorry, we don't have a cafe at that location."}), 404)
 
 
 ## HTTP POST - Create Record
